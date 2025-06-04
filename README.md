@@ -18,7 +18,7 @@ El modelo fue entrenado y evaluado en un conjunto de datos. El flujo completo de
 
 ## Requisitos Previos
 
-- Python 3.8+
+- Python 3.x+
 - PyTorch 1.10+
 - Transformers
 - scikit-learn
