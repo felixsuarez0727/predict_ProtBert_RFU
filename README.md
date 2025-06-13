@@ -40,6 +40,20 @@ BERT-rfu/
     └── test_results.csv       # Métricas en conjunto de evaluación
 ```
 
+## Preprocesamiento
+
+Los valores de RFU (etiquetas) se escalan mediante **estandarización (Standard Scaling)**:
+
+```python
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+df['label'] = scaler.fit_transform(df[['label']])
+```
+
+- Transformación: `z = (x - μ) / σ` (media=0, desviación estándar=1)
+- Objetivo: Mejorar convergencia del modelo y estabilidad numérica
+- El escalador se guarda en `saved_model/scaler.pkl` para uso futuro
+
 ## Uso
 
 El flujo completo de procesamiento de datos, entrenamiento y evaluación está implementado en el cuaderno Jupyter `protbert_peptidos.ipynb`.
@@ -55,7 +69,9 @@ Para ejecutar el cuaderno:
 
 ## Resultados
 
-El modelo alcanzó las siguientes métricas de rendimiento en el conjunto de evaluación:
+El modelo alcanzó las siguientes métricas de rendimiento wn conjunto de evaluación:
+
+- Dataset completo:
 
 | Métrica  | Valor  |
 | -------- | ------ |
@@ -63,10 +79,12 @@ El modelo alcanzó las siguientes métricas de rendimiento en el conjunto de eva
 | **MAE**  | 0.5573 |
 | **R²**   | 0.5808 |
 
-Los resultados completos de las predicciones y métricas pueden consultarse en [`saved_model/test_results.csv`](saved_model/test_results.csv).
+- Dataset sin outliers:
 
-**Interpretación**:
+| Métrica  | Valor  |
+| -------- | ------ |
+| **RMSE** | 0.6467 |
+| **MAE**  | 0.4983 |
+| **R²**   | 0.6915 |
 
-- **RMSE (Error Cuadrático Medio)**: 0.8251 indica la magnitud promedio del error de predicción
-- **MAE (Error Absoluto Medio)**: 0.5573 muestra el error absoluto promedio
-- **R² (Coeficiente de Determinación)**: 0.5808 sugiere que el modelo explica aproximadamente el 58% de la varianza
+Los resultados completos de las predicciones y métricas pueden consultarse en [`saved_model/test_results.csv`](saved_model/test_results.csv) con datos atípicos y [`saved_model/test_results_clean.csv`](saved_model/test_results_clean.csv) sin datos atípicos.
